@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_ui/data.dart';
 
+import 'models/product.dart';
+
 class ProductDetail extends StatefulWidget {
   const ProductDetail({super.key, required this.product});
 
@@ -59,20 +61,20 @@ class _ProductDetailState extends State<ProductDetail> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            widget.product.name,
+            widget.product.title,
             style: const TextStyle(
-              fontSize: 50,
+              fontSize: 30,
               fontWeight: FontWeight.w700,
             ),
           ),
           Center(
             child: Hero(
-              tag: widget.product.image,
+              tag: widget.product.images[0],
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.45,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(widget.product.image),
+                      image: NetworkImage(widget.product.images[0]),
                       fit: BoxFit.contain),
                 ),
               ),
@@ -84,20 +86,13 @@ class _ProductDetailState extends State<ProductDetail> {
             child: Row(
               children: [
                 Text(
-                  'Rp ${widget.product.price}',
+                  'USD ${widget.product.price}',
                   style: const TextStyle(
                     color: Colors.green,
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Text(
-                  ' /${widget.product.quantity}',
-                  style: const TextStyle(
-                      color: Colors.green,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400),
-                )
               ],
             ),
           ),
@@ -159,7 +154,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Center(
                   child: Container(
                     width: 190,
-                    height: 60,
+                    height: 50,
                     decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
                           Radius.circular(25),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grocery_ui/data.dart';
 import 'package:grocery_ui/product_detail.dart';
 
+import 'models/product.dart';
+
 class ItemWidget extends StatelessWidget {
   const ItemWidget({Key? key, required this.product}) : super(key: key);
   final Product product;
@@ -11,7 +13,9 @@ class ItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ProductDetail(product: product);
+          return ProductDetail(
+            product: product,
+          );
         }));
       },
       child: Card(
@@ -23,95 +27,96 @@ class ItemWidget extends StatelessWidget {
         ),
         child: Column(
           children: [
+            SizedBox(
+              height: 20,
+            ),
             Hero(
-              tag: product.image,
+              tag: product.images[0],
               child: SizedBox(
-                width: 150,
-                child: Image.asset(product.image),
+                width: 80,
+                child: Image.network(product.images[0]),
               ),
             ),
             const SizedBox(
-              height: 6,
+              height: 8,
             ),
             Text(
-              'Rp ${product.price}',
+              'USD ${product.price}',
               style: const TextStyle(
                   color: Colors.green,
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
             const SizedBox(
-              height: 2,
-            ),
-            Text(
-              product.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            Text(
-              product.quantity,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-            ),
-            const SizedBox(
               height: 4,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                product.title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
             ),
             const Divider(
               height: 2,
               color: Colors.grey,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
-                  children: const [
-                    Icon(
-                      Icons.shopping_cart,
-                      color: Colors.green,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: const [
+                        Icon(
+                          Icons.shopping_cart,
+                          color: Colors.green,
+                        ),
+                        SizedBox(
+                          width: 2,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      'Beli',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 16,
+                      ),
                     ),
                     SizedBox(
-                      width: 2,
+                      width: 8,
                     ),
-                  ],
-                ),
-                Text(
-                  'Beli',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Row(
-                  children: const [
-                    Icon(
-                      Icons.remove_circle_outline,
-                      size: 18,
-                      color: Colors.green,
+                    Row(
+                      children: const [
+                        Icon(
+                          Icons.remove_circle_outline,
+                          size: 18,
+                          color: Colors.green,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: Text('0'),
+                        ),
+                        Icon(
+                          Icons.add_circle_outline,
+                          size: 18,
+                          color: Colors.green,
+                        )
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: Text('0'),
-                    ),
-                    Icon(
-                      Icons.add_circle_outline,
-                      size: 18,
-                      color: Colors.green,
-                    )
                   ],
                 ),
               ],
             ),
-            const SizedBox(
-              width: 8,
-            ),
-            Card(),
           ],
         ),
       ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocery_ui/bloc/product_bloc.dart';
 import 'package:grocery_ui/data.dart';
 import 'package:grocery_ui/item_widget.dart';
 
@@ -11,13 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (context) => ProductBloc()..add(GetProductEvent()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MainPage(),
       ),
-      home: const MainPage(),
     );
   }
 }
@@ -30,14 +35,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final data = Product(
-    'Bayam',
-    '2.000',
-    '1 ikat',
-    'assets/img1.png',
-    'Secara umum sayuran dan buah-buahan merupakan sumber berbagai vitamin, mineral,',
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,21 +91,33 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.all(10),
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 10,
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              childAspectRatio: 0.6,
-            ),
-            itemBuilder: (context, index) {
-              return ItemWidget(product: allData[index]);
-            },
-            itemCount: allData.length
-            //supaya tidak overflow
-            ),
-      ),
+          padding: const EdgeInsets.all(10),
+          child:
+              BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
+            if (state is ProductLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is ProductSuccess) {
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 0.6,
+                ),
+                itemBuilder: (context, index) {
+                  return ItemWidget(product: state.products[index]);
+                },
+                itemCount: state.products.length,
+              );
+            }
+
+            return const Center(
+              child: Text('No Data'),
+            );
+          })),
     );
   }
 }
