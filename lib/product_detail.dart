@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_ui/data.dart';
-
 import 'models/product.dart';
 
 class ProductDetail extends StatefulWidget {
